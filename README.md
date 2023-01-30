@@ -25,6 +25,27 @@ if __name__ == '__main__':
     app.run()
 ```
 
+### fields with optional response_formatter
+```python
+import flask
+import require
+
+app = flask.Flask(__name__)
+
+def __response(name, description="", code=200):
+    formatter_response = {"name": name, "description": description}
+
+    return flask.make_response(dumps(formatter_response), code)
+
+@app.route("/")
+@fields(flask.request, response_formatter=__response)
+def index(path):
+    return {"name": "success", "description": "Works as it should"}
+
+if __name__ == '__main__':
+    app.run()
+```
+
 ## Usage of admin
 
 ```python
