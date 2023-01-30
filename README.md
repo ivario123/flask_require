@@ -32,16 +32,12 @@ import require
 
 app = flask.Flask(__name__)
 
-def __response(name, description="", code=200, content=None, content_type=None):
+def __response(name, description="", code=200):
     formatter_response = {"name": name, "description": description}
-    if content and content_type:
-        formatter_response["content"] = content
-        formatter_response["content_type"] = content_type
 
     return flask.make_response(dumps(formatter_response), code)
 
-
-@app.route("/", methods=["POST"])
+@app.route("/")
 @fields(flask.request, response_formatter=__response)
 def index(path):
     return {"name": "success", "description": "Works as it should"}
