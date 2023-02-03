@@ -3,16 +3,16 @@ A simple decorator that allows you to automatically return
 an error if the user does not post the required fields.
 """
 from functools import wraps
-from flask import session, request
+from flask import session, request, make_response
 from json import loads, dumps
 import inspect
 
 
 def response(name, description="", code=200):
-    return dumps({"status": code, "name": name, "description": description})
+    return make_response(dumps({"status": code, "name": name, "description": description}), code)
 
 
-def fields(request, response_formatter=None):
+def fields(request, response_formatter=None, error_formatter=response):
     """
     Wraps the decorated function in a super function that will
     check that the required fields are present in the request
@@ -35,14 +35,10 @@ def fields(request, response_formatter=None):
                 try:
                     data = request.json
                 except:
-                    if response_formatter:
-                        return response_formatter(**default_error_response)
-                    return response(**default_error_response)
+                    return error_formatter(**default_error_response)
             # Get the required fields from the function signature
             if data == None:
-                if response_formatter:
-                    return response_formatter(**default_error_response)
-                return response(**default_error_response)
+                return error_formatter(**default_error_response)
             fields = inspect.getfullargspec(func).args
             args = []
             for field in fields:
@@ -54,10 +50,7 @@ def fields(request, response_formatter=None):
                         "description": f"Missing field '{field}'",
                         "code": 400,
                     }
-                    if response_formatter:
-                        return response_formatter(**missing_filed_response)
-                    return response(**missing_filed_response)
-
+                    return error_formatter(**missing_filed_response)
             if response_formatter:
                 return response_formatter(**func(*args, **kwargs))
             return func(*args, **kwargs)
