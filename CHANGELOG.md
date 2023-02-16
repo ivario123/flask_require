@@ -2,6 +2,16 @@
 
 This changelog details all version bumps and changes made to the `flask_require` library.
 
+## [0.0.4]
+
+### 1. Update docs
+
+Docs are now using f strings instead of older style formatting.
+
+## 2. Add type enforcement
+
+Added type enforcement to the require.fields method.
+
 ## [0.0.3]
 
 ### 1. Improved the response function

@@ -23,7 +23,7 @@ def fields(request, response_formatter=None, error_formatter=response):
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
-            # Get JSON data from request, if not pressent return 400
+            # Get JSON data from request, if not present return 400
             default_error_response = {
                 "name": "Invalid JSON",
                 "description": "The request body is not valid JSON",
