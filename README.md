@@ -19,13 +19,14 @@ app = Flask(__name__)
 @app.route('/')
 @require.fields(request)
 def index(name):
-    return 'Hello, %s!' % name
+    return f"Hello, {name}!"
 
 if __name__ == '__main__':
     app.run()
 ```
 
 ### fields with optional response_formatter
+
 ```python
 import flask
 import require
@@ -46,6 +47,26 @@ if __name__ == '__main__':
     app.run()
 ```
 
+### Enforcing types
+
+The system will check that the types provided in the signature and the types
+provided by the caller are the same before passing the arguments to the function.
+
+```python
+from flask import Flask,request
+import require
+
+app = Flask(__name__)
+
+@app.route('/')
+@require.fields(request)
+def index(name:str):
+    return f"Hello, {name}!"
+
+if __name__ == '__main__':
+    app.run()
+```
+
 ## Usage of admin
 
 ```python
@@ -57,7 +78,7 @@ app = Flask(__name__)
 @app.route('/')
 @fields(request)
 def index(name):
-    return 'Hello, %s!' % name
+    return f"Hello, {name}!"
 
 @app.route('/admin')
 @admin()

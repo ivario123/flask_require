@@ -23,7 +23,7 @@ def fields(request, response_formatter=None, error_formatter=response):
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
-            # Get JSON data from request, if not pressent return 400
+            # Get JSON data from request, if not present return 400
             default_error_response = {
                 "name": "Invalid JSON",
                 "description": "The request body is not valid JSON",
@@ -36,13 +36,24 @@ def fields(request, response_formatter=None, error_formatter=response):
                     data = request.json
                 except:
                     return error_formatter(**default_error_response)
-            # Get the required fields from the function signature
             if data == None:
                 return error_formatter(**default_error_response)
-            fields = inspect.getfullargspec(func).args
+
+            spec = inspect.getfullargspec(func)
+            annotations = spec.annotations
+            fields = spec.args
             args = []
             for field in fields:
                 if field in data.keys():
+                    actual_type = type(data[field])
+                    expected_type = annotations.get(field, actual_type)
+                    if actual_type != expected_type:
+                        incorrect_field_type_response = {
+                            "name": "Incorrect field type",
+                            "description": f"Expected '{field}' to be of type {expected_type} got type {actual_type}",
+                            "code": 400,
+                        }
+                        return error_formatter(**incorrect_field_type_response)
                     args.append(data[field])
                 else:
                     missing_filed_response = {
