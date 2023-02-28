@@ -5,5 +5,13 @@ version = "0.0.4"
 description = "A simple Flask extension for requiring parameters in a request."
 readme = "README.md"
 
+[project.urls]
+github="https://github.com/ivario123/flask_require"
+
 [dependencies]
 flask = ">=0.10.1"
+functools = "*"
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
