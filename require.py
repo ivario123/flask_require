@@ -91,7 +91,7 @@ def fields(request, response_formatter=None, error_formatter=response, check_typ
                 return error_formatter(**default_error_response)
 
             spec = inspect.getfullargspec(func)
-            
+
             if check_type:
                 annotations = spec.annotations
             fields = spec.args
