@@ -87,14 +87,13 @@ def fields(request, response_formatter=None, error_formatter=response, check_typ
                     data = request.json
                 except:
                     return error_formatter(**default_error_response)
-
             if data == None:
                 return error_formatter(**default_error_response)
 
             spec = inspect.getfullargspec(func)
+            
             if check_type:
                 annotations = spec.annotations
-
             fields = spec.args
             args = []
 
@@ -118,7 +117,6 @@ def fields(request, response_formatter=None, error_formatter=response, check_typ
                             "code": 400,
                         }
                         return error_formatter(**incorrect_field_type_response)
-
                     args.append(data[field])
 
                 else:
